@@ -25,6 +25,16 @@ export default async function routes(app: FastifyInstance) {
     return reply.code(201).send(createRes);
   });
 
+  // Listar todos os lotes -> chama chaincode GetAllBatches
+  app.get("/", { preHandler: app.auth }, async (req, reply) => {
+    if (!req.user || typeof req.user !== "object" || !("sub" in req.user)) {
+      return reply.code(401).send({ message: "Unauthorized" });
+    }
+    const userId = (req.user as { sub: string }).sub;
+    const allBatchesRes = await service.getAllBatches(userId);
+    return reply.send(allBatchesRes);
+  });
+
   // Ler lote -> chama chaincode ReadBatch
   app.get("/:id", { preHandler: app.auth }, async (req, reply) => {
     if (!req.user || typeof req.user !== "object" || !("sub" in req.user)) {

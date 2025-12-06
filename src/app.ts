@@ -1,10 +1,13 @@
 import Fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
+import fastifyCors from "@fastify/cors";
 import batchesController from "./batches/batches.controller";
 
 const app = Fastify({ logger: true });
 
 const start = async () => {
+  await app.register(fastifyCors, { origin: true });
+  
   await app.register(fastifyJwt, { secret: process.env.JWT_SECRET ?? "dev-secret" });
 
   app.decorate("auth", async (req, reply) => {
@@ -25,7 +28,7 @@ const start = async () => {
 
   await app.register(batchesController, { prefix: "/batches" });
 
-  const port = Number(process.env.PORT ?? 3000);
+  const port = Number(process.env.PORT ?? 3333);
   await app.listen({ port, host: "0.0.0.0" });
 };
 

@@ -26,4 +26,9 @@ export class BatchesService {
     const res = await this.fabric.evaluate(userId, "ReadBatch", batchId);
     return { ok: true, payload: res };
   }
+
+  async getAllBatches(userId: string) {
+    const res = await this.fabric.evaluate(userId, "GetAllBatches");
+    return { ok: true, payload: res };
+  }
 }
