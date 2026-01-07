@@ -22,10 +22,12 @@ export class FabricClient {
     if (!identity) throw new Error(`Identidade '${userId}' não encontrada na wallet (${this.walletPath}).`);
 
     const gateway = new Gateway();
+    const discoveryEnabled = (process.env.DISCOVERY_ENABLED ?? "true").toLowerCase() === "true";
+    const asLocalhost = (process.env.DISCOVERY_AS_LOCALHOST ?? "true").toLowerCase() === "true";
     await gateway.connect(this.ccp, {
       wallet,
       identity: userId,
-      discovery: { enabled: true, asLocalhost: true },
+      discovery: { enabled: discoveryEnabled, asLocalhost },
       eventHandlerOptions: { strategy: DefaultEventHandlerStrategies.NETWORK_SCOPE_ALLFORTX }
     });
 

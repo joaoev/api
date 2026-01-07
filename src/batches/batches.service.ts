@@ -1,6 +1,10 @@
 import { FabricClient } from "../core/fabricClient";
 
-type CreateDTO = { batchId: string; farmId: string; volumeLiters: number; fatPercent: number };
+type CreateDTO = { 
+  batchId: string; 
+  farmId: string; 
+  volumeLiters: number; 
+  lastFarmTempC: number };
 
 export class BatchesService {
   private fabric = new FabricClient({
@@ -17,7 +21,7 @@ export class BatchesService {
       dto.batchId,
       dto.farmId,
       String(dto.volumeLiters),
-      String(dto.fatPercent)
+      String(dto.lastFarmTempC)
     );
     return { ok: true, txId: tx.txId, payload: tx.payload };
   }
